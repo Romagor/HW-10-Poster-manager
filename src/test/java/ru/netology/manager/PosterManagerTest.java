@@ -4,9 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.domain.MovieItem;
+import ru.netology.repository.PosterRepository;
+import org.mockito.Mockito;
 
 public class PosterManagerTest {
-    PosterManager manager = new PosterManager();
+    PosterRepository repository = Mockito.mock(PosterRepository.class);
+    PosterManager manager = new PosterManager(repository);
     MovieItem film1 = new MovieItem(1, 100, "Бладшот", "боевик");
     MovieItem film2 = new MovieItem(2, 101, "Вперёд", "мультфильм");
     MovieItem film3 = new MovieItem(3, 102, "Отель 'Белград'", "комедия");
@@ -18,8 +21,8 @@ public class PosterManagerTest {
     MovieItem film9 = new MovieItem(9, 108, "Секреты Дамблдора", "фэнтези");
     MovieItem film10 = new MovieItem(10, 109, "Неувольняемый", "комедия");
 
-    @BeforeEach
-    public void setup() {
+    @Test
+    public void shouldFindAllMovies() {
         manager.add(film1);
         manager.add(film2);
         manager.add(film3);
@@ -27,10 +30,6 @@ public class PosterManagerTest {
         manager.add(film5);
         manager.add(film6);
         manager.add(film7);
-    }
-
-    @Test
-    public void shouldFindAllMovies() {
         manager.add(film8);
         manager.add(film9);
         manager.add(film10);
@@ -73,6 +72,13 @@ public class PosterManagerTest {
 
     @Test
     public void shouldShowAllMoviesRevers() {
+        manager.add(film1);
+        manager.add(film2);
+        manager.add(film3);
+        manager.add(film4);
+        manager.add(film5);
+        manager.add(film6);
+        manager.add(film7);
         manager.add(film8);
         manager.add(film9);
         manager.add(film10);
@@ -87,6 +93,13 @@ public class PosterManagerTest {
     @Test
     public void shouldShowLastFiveMovies() {
         PosterManager manager = new PosterManager(5);
+        manager.add(film1);
+        manager.add(film2);
+        manager.add(film3);
+        manager.add(film4);
+        manager.add(film5);
+        manager.add(film6);
+        manager.add(film7);
         manager.add(film6);
         manager.add(film7);
         manager.add(film8);
@@ -98,4 +111,23 @@ public class PosterManagerTest {
 
         Assertions.assertArrayEquals(expected, actual);
     }
+
+    @Test
+    public void shouldDeleteAll() {
+        repository.removeAll();
+        MovieItem[] actual = manager.getFindLast();
+        MovieItem[] expected = new MovieItem[0];
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldFindById() {
+        repository.findById(1);
+        MovieItem actual = new MovieItem(1, 100, "Бладшот", "боевик");
+        MovieItem expected = film1;
+
+        Assertions.assertEquals(expected, actual);
+    }
 }
+
