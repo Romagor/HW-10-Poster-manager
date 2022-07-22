@@ -1,8 +1,10 @@
 package ru.netology.manager;
 
 import ru.netology.domain.MovieItem;
+import ru.netology.repository.PosterRepository;
 
 public class PosterManager {
+    private PosterRepository repository;
     private MovieItem[] items = new MovieItem[0];
     int limitMovie = 10;
 
@@ -11,6 +13,10 @@ public class PosterManager {
 
     public PosterManager(int limitMovie) {
         this.limitMovie = limitMovie;
+    }
+
+    public PosterManager(PosterRepository repository) {
+        this.repository = repository;
     }
 
     public void add(MovieItem item) {
